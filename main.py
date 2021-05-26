@@ -1,8 +1,5 @@
-from functions.data_process import prepare_dataset
-from functions.data_process import cleaning_data
+from init import Init
 
-dataset = prepare_dataset("Fake.csv","True.csv","FAKE","REAL","text",1)[0];
-
-dataset['text'] = dataset['text'].apply(lambda x : cleaning_data(x))
-
+dataset = Init()
 print(dataset);
+
