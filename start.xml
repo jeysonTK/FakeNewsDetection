@@ -1,0 +1,15 @@
+<config>
+	<mode value="train"/>
+	<percentage value="1"/>
+	<type value="ML"/>
+	<files>
+		<true value="True.csv"/>
+		<fake value="Fake.csv"/>
+		<saveModel value="model.sM"/>
+	</files>
+	<labels>
+		<true value="REAL"/>
+		<fake value="FALSE"/>
+		<verification value="text"/>
+	</labels>
+</config>
