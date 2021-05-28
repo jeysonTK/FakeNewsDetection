@@ -4,7 +4,6 @@ import pandas as pd
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
 
-nltk.download('stopwords')
 
 def prepare_dataset(fakeCsv,trueCsv,fakeLabel,trueLabel,testHead,train_percentage): 
 	#Read data from files
