@@ -45,12 +45,14 @@ def train_ml(dataset, filename):
 	y = dataset.iloc[:35000,1]
 	print( "Split data..." )
 	train_data , test_data , train_label , test_label = train_test_split(X , y , test_size = 0.2 ,random_state = 0)
-
+	print( "Vectorize train data...." )
 	vec_train_data = vectorizer.fit_transform(train_data)
 	vec_train_data = vec_train_data.toarray()
 	train_data.shape , test_data.shape
+	print( "Vectorize test data..." )
 	vec_test_data = vectorizer.transform(test_data).toarray()
 	vec_train_data.shape , vec_test_data.shape
+	print("Counting labels...")
 	train_label.value_counts() # balanced partition
 	test_label.value_counts() # balanced partition
 
