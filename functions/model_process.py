@@ -1,4 +1,5 @@
 import joblib 
+import pickle
 import numpy as np
 import pandas as pd
 from init import Init
@@ -67,15 +68,16 @@ def train_ml(dataset, filename):
 	
 	accuracy_score(train_label , y_pred_train)
 	accuracy_score(test_label , y_pred)
-
-	joblib.dump(clf , filename)
+	
+	with open(filename, 'wb') as fout:
+		pickle.dump((vectorizer, clf), fout)
+	
 	
 def single_predict_ml(news,filename):
-	model = joblib.load(filename)
-	vectorizer = TfidfVectorizer( model, decode_error='ignore') 
-	news_cleaned = cleaning_data(news)
-	vec_train_data = vectorizer.fit_transform([news_cleaned])
-	vec_train_data.shape
-	training_data = pd.DataFrame(vec_train_data , columns=vectorizer.get_feature_names())
-	single_prediction = model.predict(training_data)
-	single_prediction
+	print("Loading model ["+filename+"]")
+	
+	with open(filename, 'rb') as f:
+		vectorizer, model = pickle.load(f)
+	print (vectorizer)
+	single_prediction = model.predict(vectorizer.transform([news]).toarray())
+	print(single_prediction)

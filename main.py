@@ -18,6 +18,6 @@ def switch(argument):
 		dataset = prepare_dataset(init_data[3],init_data[4],init_data[5],init_data[6],init_data[7],init_data[8],init_data[9])[0];
 		train_ml(dataset, init_data[2])
 	elif argument == "STEST_ML":
-		single_predict_ml(str(sys.argv[0]),init_data[2])
+		single_predict_ml(str(sys.argv[1]),init_data[2])
 switch( (init_data[0]+"_"+init_data[1]))
 
