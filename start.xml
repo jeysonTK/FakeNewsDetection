@@ -1,11 +1,12 @@
 <config>
-	<mode value="train"/>
+	<mode value="TRAIN"/>
 	<percentage value="1"/>
 	<type value="ML"/>
+	<clean value="FALSE"/>
 	<files>
 		<true value="True.csv"/>
 		<fake value="Fake.csv"/>
-		<saveModel value="model.sM"/>
+		<saveModel value="model.pkl"/>
 	</files>
 	<labels>
 		<true value="REAL"/>
