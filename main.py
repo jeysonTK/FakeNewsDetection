@@ -15,9 +15,9 @@ def switch(argument):
 		predict_ml(dataset, init_data[2])
 	elif argument == "TRAIN_ML":
 		print ( "Preparing dataset..." )
-		dataset = prepare_dataset(init_data[3],init_data[4],init_data[5],init_data[6],init_data[7],init_data[8],init_data[9])[0];
+		dataset = prepare_dataset(init_data[3],init_data[4],init_data[5],init_data[6],init_data[7],init_data[8],init_data[9]);
 		train_ml(dataset, init_data[2])
 	elif argument == "STEST_ML":
-		single_predict_ml(str(sys.argv[1]),init_data[2])
+		single_predict_ml(str(sys.argv[1]),init_data[2],init_data[9])
 switch( (init_data[0]+"_"+init_data[1]))
 

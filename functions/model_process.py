@@ -73,11 +73,16 @@ def train_ml(dataset, filename):
 		pickle.dump((vectorizer, clf), fout)
 	
 	
-def single_predict_ml(news,filename):
+def single_predict_ml(news,filename,clean):
 	print("Loading model ["+filename+"]")
 	
 	with open(filename, 'rb') as f:
 		vectorizer, model = pickle.load(f)
 	print (vectorizer)
+	if clean.lower() == "true":
+		print ( "Cleaning data...")
+		news = cleaning_data(news)
+		print( news )
+	
 	single_prediction = model.predict(vectorizer.transform([news]).toarray())
 	print(single_prediction)

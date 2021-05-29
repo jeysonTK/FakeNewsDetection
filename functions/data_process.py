@@ -41,11 +41,12 @@ def prepare_dataset(fakeCsv,trueCsv,fakeLabel,trueLabel,testHead,train_percentag
 	data_test = data_test.sample(frac = 1)
 	
 	dataset = [data_train[[testHead,'label']], data_test[[testHead,'label']]]
-	
+	dataset = dataset[0]
 	if clean.lower() == "true":
 		print ( "Cleaning data...")
-		dataset[0]['text'] = dataset[0]['text'].apply(lambda x : cleaning_data(x))
+		dataset['text'] = dataset['text'].apply(lambda x : cleaning_data(x))
 	
+	print ( dataset )
 	return dataset
 
 def load_prepared_dataset(trainCsv,testCsv,testHead):
