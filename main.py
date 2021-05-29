@@ -1,5 +1,6 @@
 import sys
 from init import Init
+from functions.data_process import prepare_dataset
 from functions.model_process import predict_ml
 from functions.model_process import train_ml
 from functions.model_process import single_predict_ml
@@ -8,8 +9,6 @@ from functions.model_process import single_predict_ml
 # 				4 = True CSV	5 = Label for fake; 6 = Label for true; 			7 = verification label; 		
 #				8 = percentage	9 = clean
 init_data = Init()
-
-print (dataset)
 
 def switch(argument):
 	if argument == "TEST_ML":

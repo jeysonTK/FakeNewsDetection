@@ -37,8 +37,6 @@ def predict_ml(dataset, filename):
 	
 def train_ml(dataset, filename):
 	print ("Train ML...")
-	print ("Cleaning data")
-	dataset['text'] = dataset['text'].apply(lambda x : cleaning_data(x))
 	print("Vectorize data...")
 	vectorizer = TfidfVectorizer(max_features = 50000 , lowercase=False , ngram_range=(1,2))
 	
