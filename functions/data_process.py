@@ -65,15 +65,22 @@ def dataset_statistics(fakeCsv,trueCsv,fakeLabel,trueLabel,testHead,train_percen
 		fake[testHead] = fake[testHead].apply(lambda x : cleaning_data(x))
 		true[testHead] = true[testHead].apply(lambda x : cleaning_data(x))
 	
+	print ( "Make word dictionary from fake news..." )
 	fake_dict = word_dict(fake[testHead])
+	print ( "Make word dictionary from real news..." )
 	true_dict = word_dict(true[testHead])
 	
+	print ( "Search for word in news that is in fake and in real..." )
 	dict_fake_and_true = union_dict(fake_dict,true_dict)
+	print ( "Search for word in news that is in real and in fake..." )
 	dict_true_and_fake = union_dict(true_dict,fake_dict)
 	
+	print ( "Search for word in news that is in fake and NOT in real..." )
 	dict_fake_not_in_true = not_in(fake_dict,true_dict)
+	print ( "Search for word in news that is in real and NOT in fake..." )
 	dict_true_not_in_fake = not_in(true_dict,fake_dict)
 	
+	print ( "Convert obtained dictionary to CSV" )
 	fake_word_count_CSV = pd.DataFrame(fake_dict.items()).sort_values(by=1,ascending=False)
 	true_word_count_CSV = pd.DataFrame(true_dict.items()).sort_values(by=1,ascending=False) 
 	dict_fake_and_true_CSV=pd.DataFrame(dict_fake_and_true.items()).sort_values(by=1,ascending=False)
@@ -92,8 +99,10 @@ def dataset_statistics(fakeCsv,trueCsv,fakeLabel,trueLabel,testHead,train_percen
 			for key in true_dict.keys():
 				f.write("%s,%s\n"%(key,true_dict[key]))
 				
+	print ( "Increase figure size" )			
 	pl.rcParams["figure.figsize"] = (10, 5)
 	
+	print ( "Save figures" )			
 	fake_myplot = fake_word_count_CSV[0:train_percentage].plot.bar(x=0, y=1, rot=0)
 	fake_myplot.figure.savefig("false_"+saveProc+".pdf")
 	
