@@ -101,14 +101,20 @@ def dataset_statistics(fakeCsv,trueCsv,fakeLabel,trueLabel,testHead,train_percen
 	print(dict_fake_not_in_true)
 	print(dict_true_not_in_fake)
 	print ( "Convert obtained dictionary to CSV" )
-	fake_word_count_CSV = pd.DataFrame(fake_dict.items()).sort_values(by=1,ascending=False)
-	true_word_count_CSV = pd.DataFrame(true_dict.items()).sort_values(by=1,ascending=False) 
-	dict_fake_and_true_CSV=pd.DataFrame(dict_fake_and_true.items()).sort_values(by=1,ascending=False)
-	dict_true_and_fake_CSV=pd.DataFrame(dict_true_and_fake.items()).sort_values(by=1,ascending=False)
-	dict_fake_not_in_true_CSV=pd.DataFrame(dict_fake_not_in_true.items()).sort_values(by=1,ascending=False)
-	dict_true_not_in_fake_CSV=pd.DataFrame(dict_true_not_in_fake.items()).sort_values(by=1,ascending=False)
-	print(dict_fake_not_in_true_CSV)	
-	print(dict_true_not_in_fake_CSV)
+	
+	if bool(fake_dict) ==  True:
+		fake_word_count_CSV = pd.DataFrame(fake_dict.items()).sort_values(by=1,ascending=False)
+	if bool(true_dict) ==  True:
+		true_word_count_CSV = pd.DataFrame(true_dict.items()).sort_values(by=1,ascending=False)
+	if bool(dict_fake_and_true) ==  True:
+		dict_fake_and_true_CSV=pd.DataFrame(dict_fake_and_true.items()).sort_values(by=1,ascending=False)
+	if bool(dict_true_and_fake) ==  True:
+		dict_true_and_fake_CSV=pd.DataFrame(dict_true_and_fake.items()).sort_values(by=1,ascending=False)
+	if bool(dict_fake_not_in_true) ==  True:
+		dict_fake_not_in_true_CSV=pd.DataFrame(dict_fake_not_in_true.items()).sort_values(by=1,ascending=False)
+	if bool(dict_true_not_in_fake) ==  True:
+		dict_true_not_in_fake_CSV=pd.DataFrame(dict_true_not_in_fake.items()).sort_values(by=1,ascending=False)
+
 	if saveProc != "":
 		print( "Save processed data" )
 		with open( "fake_"+saveProc, 'w') as f:
@@ -123,30 +129,36 @@ def dataset_statistics(fakeCsv,trueCsv,fakeLabel,trueLabel,testHead,train_percen
 	print ( "Increase figure size" )			
 	pl.rcParams["figure.figsize"] = (15, 5)
 	
-	print ( "Save figures" )			
-	fake_myplot = fake_word_count_CSV[0:train_percentage].plot.bar(x=0, y=1, rot=0)
-	fake_myplot.figure.savefig("false_"+saveProc+to_save_com+".pdf")
-	
-	true_myplot = true_word_count_CSV[0:train_percentage].plot.bar(x=0, y=1, rot=0)
-	true_myplot.figure.savefig("true_"+saveProc+to_save_com+".pdf")
-	
-	dict_fake_and_true_CSV_myplot = dict_fake_and_true_CSV[0:train_percentage].plot.bar(x=0, y=1, rot=0)
-	dict_fake_and_true_CSV_myplot.figure.savefig("Fake_And_True_"+saveProc+to_save_com+".pdf")
-	
-	dict_fake_and_true_CSV_myplot2 = dict_fake_and_true_CSV[(len(dict_fake_and_true_CSV)-train_percentage):len(dict_fake_and_true_CSV)].plot.bar(x=0, y=1, rot=0)
-	dict_fake_and_true_CSV_myplot2.figure.savefig("Fake_And_True_Min_"+saveProc+to_save_com+".pdf")
-	
-	dict_true_and_fake_CSV_myplot = dict_true_and_fake_CSV[0:train_percentage].plot.bar(x=0, y=1, rot=0)
-	dict_true_and_fake_CSV_myplot.figure.savefig("True_And_Fake_"+saveProc+to_save_com+".pdf")
-	
-	dict_true_and_fake_CSV_myplot2 = dict_true_and_fake_CSV[(len(dict_true_and_fake_CSV)-train_percentage):len(dict_true_and_fake_CSV)].plot.bar(x=0, y=1, rot=0)
-	dict_true_and_fake_CSV_myplot2.figure.savefig("True_And_Fake_Min."+saveProc+to_save_com+".pdf")
-	
-	dict_fake_not_in_true_CSV_myplot = dict_fake_not_in_true_CSV[0:train_percentage].plot.bar(x=0, y=1, rot=0)
-	dict_fake_not_in_true_CSV_myplot.figure.savefig("fake_not_in_true_"+saveProc+to_save_com+".pdf")
-	
-	dict_true_not_in_fake_CSV_myplot = dict_true_not_in_fake_CSV[0:train_percentage].plot.bar(x=0, y=1, rot=0)
-	dict_true_not_in_fake_CSV_myplot.figure.savefig("true_not_in_fake_"+saveProc+to_save_com+".pdf")
+	print ( "Save figures" )	
+	if bool(fake_dict) ==  True:
+		fake_myplot = fake_word_count_CSV[0:train_percentage].plot.bar(x=0, y=1, rot=0)
+		fake_myplot.figure.savefig("false_"+saveProc+to_save_com+".pdf")
+		
+	if bool(true_dict) ==  True:
+		true_myplot = true_word_count_CSV[0:train_percentage].plot.bar(x=0, y=1, rot=0)
+		true_myplot.figure.savefig("true_"+saveProc+to_save_com+".pdf")
+		
+	if bool(dict_fake_and_true) ==  True:
+		dict_fake_and_true_CSV_myplot = dict_fake_and_true_CSV[0:train_percentage].plot.bar(x=0, y=1, rot=0)
+		dict_fake_and_true_CSV_myplot.figure.savefig("Fake_And_True_"+saveProc+to_save_com+".pdf")
+
+		dict_fake_and_true_CSV_myplot2 = dict_fake_and_true_CSV[(len(dict_fake_and_true_CSV)-train_percentage):len(dict_fake_and_true_CSV)].plot.bar(x=0, y=1, rot=0)
+		dict_fake_and_true_CSV_myplot2.figure.savefig("Fake_And_True_Min_"+saveProc+to_save_com+".pdf")
+		
+	if bool(dict_true_and_fake) ==  True:
+		dict_true_and_fake_CSV_myplot = dict_true_and_fake_CSV[0:train_percentage].plot.bar(x=0, y=1, rot=0)
+		dict_true_and_fake_CSV_myplot.figure.savefig("True_And_Fake_"+saveProc+to_save_com+".pdf")
+
+		dict_true_and_fake_CSV_myplot2 = dict_true_and_fake_CSV[(len(dict_true_and_fake_CSV)-train_percentage):len(dict_true_and_fake_CSV)].plot.bar(x=0, y=1, rot=0)
+		dict_true_and_fake_CSV_myplot2.figure.savefig("True_And_Fake_Min."+saveProc+to_save_com+".pdf")
+		
+	if bool(dict_fake_not_in_true) ==  True:
+		dict_fake_not_in_true_CSV_myplot = dict_fake_not_in_true_CSV[0:train_percentage].plot.bar(x=0, y=1, rot=0)
+		dict_fake_not_in_true_CSV_myplot.figure.savefig("fake_not_in_true_"+saveProc+to_save_com+".pdf")
+		
+	if bool(dict_true_not_in_fake) ==  True:
+		dict_true_not_in_fake_CSV_myplot = dict_true_not_in_fake_CSV[0:train_percentage].plot.bar(x=0, y=1, rot=0)
+		dict_true_not_in_fake_CSV_myplot.figure.savefig("true_not_in_fake_"+saveProc+to_save_com+".pdf")
 
 	
 def load_prepared_dataset(trainCsv,testCsv,testHead):
