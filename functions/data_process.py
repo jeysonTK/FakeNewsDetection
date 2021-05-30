@@ -6,7 +6,7 @@ from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
 
 
-def prepare_dataset(fakeCsv,trueCsv,fakeLabel,trueLabel,testHead,train_percentage, clean): 
+def prepare_dataset(fakeCsv,trueCsv,fakeLabel,trueLabel,testHead,train_percentage, clean, cleanLevel): 
 	print ( "Read data from files..." )
 	fake = pd.read_csv(fakeCsv)
 	true = pd.read_csv(trueCsv)
@@ -44,9 +44,18 @@ def prepare_dataset(fakeCsv,trueCsv,fakeLabel,trueLabel,testHead,train_percentag
 	dataset = [data_train[[testHead,'label']], data_test[[testHead,'label']]]
 	dataset = dataset[0]
 	if clean.lower() == "true":
-		print ( "Cleaning data...")
-		dataset[testHead] = dataset[testHead].apply(lambda x : cleaning_data(x))
-	
+		if clean_level == 1:
+			print ( "Cleaning data L1...")
+			dataset[testHead] = dataset[testHead].apply(lambda x : soft_cleaning_data(x))
+			
+		if clean_level == 2:
+			print ( "Cleaning data L2...")
+			dataset[testHead] = dataset[testHead].apply(lambda x : cleaning_data(x))
+			
+		if clean_level == 3:
+			print ( "Cleaning data L3...")
+			dataset[testHead] = dataset[testHead].apply(lambda x : xtream_cleaning_data(x))
+			
 	print ( dataset )
 	return dataset
 	
