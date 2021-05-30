@@ -177,6 +177,7 @@ def xtream_cleaning_data(row):
 	stopwords1 = stopwords.words('english')
 	stopwords1.extend(["monday","tuesday","wednesday","thursday","friday","saturday","sunday"])
 	stopwords1.extend(["january","february","march","april","may","june","july","august","september","october ","november","december"])
+	stopwords1.extend(["reuters"])
 	
 	row = row.replace("U.S.", "UnitedStates")
 	row = row.lower()
