@@ -98,8 +98,7 @@ def dataset_statistics(fakeCsv,trueCsv,fakeLabel,trueLabel,testHead,train_percen
 	dict_fake_not_in_true = not_in(fake_dict,true_dict)
 	print ( "Search for word in news that is in real and NOT in fake..." )
 	dict_true_not_in_fake = not_in(true_dict,fake_dict)
-	print(dict_fake_not_in_true)
-	print(dict_true_not_in_fake)
+
 	print ( "Convert obtained dictionary to CSV" )
 	
 	if bool(fake_dict) ==  True:
@@ -117,11 +116,11 @@ def dataset_statistics(fakeCsv,trueCsv,fakeLabel,trueLabel,testHead,train_percen
 
 	if saveProc != "":
 		print( "Save processed data" )
-		with open( "fake_"+saveProc, 'w') as f:
+		with open( "fake_"+saveProc+to_save_com, 'w') as f:
 			f.write("word,no\n")
 			for key in fake_dict.keys():
 				f.write("%s,%s\n"%(key,fake_dict[key]))
-		with open( "true_"+saveProc, 'w') as f:
+		with open( "true_"+saveProc+to_save_com, 'w') as f:
 			f.write("word,no\n")
 			for key in true_dict.keys():
 				f.write("%s,%s\n"%(key,true_dict[key]))
@@ -176,7 +175,9 @@ def load_prepared_dataset(trainCsv,testCsv,testHead):
 def xtream_cleaning_data(row):
 	ps = WordNetLemmatizer()
 	stopwords1 = stopwords.words('english')
-
+	stopwords1.extend(["monday","tuesday","wednesday","thursday","friday","saturday","sunday"])
+	stopwords1.extend(["january","february","march","april","may","june","july","august","september","october ","november","december"])
+	
 	row = row.replace("U.S.", "UnitedStates")
 	row = row.lower()
 	row = re.sub('[^a-zA-Z]' , ' ' , row)
@@ -185,6 +186,8 @@ def xtream_cleaning_data(row):
 	
 	news = [ps.lemmatize(word) for word in token if not word in stopwords1]  
 	cleanned_news = ' '.join(news) 
+	
+	return cleanned_news 
 	
 def cleaning_data(row):
 	ps = WordNetLemmatizer()
@@ -198,13 +201,16 @@ def cleaning_data(row):
 	news = [ps.lemmatize(word) for word in token if not word in stopwords1]  
 	cleanned_news = ' '.join(news) 
 	
+	return cleanned_news 
+	
 def soft_cleaning_data(row):
 	ps = WordNetLemmatizer()
 	stopwords1 = stopwords.words('english')
+	row = re.sub('[^a-zA-Z]' , ' ' , row)
 	
 	token = row.split() 
 	
-	news = [ps.lemmatize(word) for word in token if not word in stopwords1]  
+	news = [ps.lemmatize(word) for word in token if not word.lower() in stopwords1]  
 	cleanned_news = ' '.join(news) 
 	
 	return cleanned_news 
