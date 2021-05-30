@@ -22,8 +22,10 @@ def Init():
 	print ( "Save processed filename ["+saveProc+"]" )
 	clean = config.getElementsByTagName('clean')[0].attributes["value"].value
 	print ( "Clean ["+clean+"]" )
+	cleanLevel = config.getElementsByTagName('cleanLevel')[0].attributes["value"].value
+	print ( "Clean level["+cleanLevel+"]" )
 	saveModel = config.getElementsByTagName('saveModel')[0].attributes["value"].value
 	print ("End of init data...")
 	
-	return [mode,type,saveModel,fakeCSV,trueCSV,fakeLabel,trueLabel,verificationLabel,percentage,clean,saveProc];
+	return [mode,type,saveModel,fakeCSV,trueCSV,fakeLabel,trueLabel,verificationLabel,percentage,clean,saveProc,cleanLevel];
 	

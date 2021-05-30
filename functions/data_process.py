@@ -50,7 +50,7 @@ def prepare_dataset(fakeCsv,trueCsv,fakeLabel,trueLabel,testHead,train_percentag
 	print ( dataset )
 	return dataset
 	
-def dataset_statistics(fakeCsv,trueCsv,fakeLabel,trueLabel,testHead,train_percentage, clean,saveProc): 
+def dataset_statistics(fakeCsv,trueCsv,fakeLabel,trueLabel,testHead,train_percentage, clean,saveProc,cleanLevel): 
 	print ( "Generate statistics..." )
 	print ( "Read data from files..." )
 	fake = pd.read_csv(fakeCsv)
@@ -62,11 +62,25 @@ def dataset_statistics(fakeCsv,trueCsv,fakeLabel,trueLabel,testHead,train_percen
 	
 	to_save_com = ""
 	
+	clean_level = int(cleanLevel)
+	
 	if clean.lower() == "true":
-		print ( "Cleaning data...")
-		fake[testHead] = fake[testHead].apply(lambda x : cleaning_data(x))
-		true[testHead] = true[testHead].apply(lambda x : cleaning_data(x))
 		to_save_com = "cleaned"
+		if clean_level == 1:
+			print ( "Cleaning data L1...")
+			fake[testHead] = fake[testHead].apply(lambda x : soft_cleaning_data(x))
+			true[testHead] = true[testHead].apply(lambda x : soft_cleaning_data(x))
+			to_save_com = "cleaned_Ll"
+		if clean_level == 2:
+			print ( "Cleaning data L2...")
+			fake[testHead] = fake[testHead].apply(lambda x : cleaning_data(x))
+			true[testHead] = true[testHead].apply(lambda x : cleaning_data(x))
+			to_save_com = "cleaned_L2"
+		if clean_level == 3:
+			print ( "Cleaning data L3...")
+			fake[testHead] = fake[testHead].apply(lambda x : xtream_cleaning_data(x))
+			true[testHead] = true[testHead].apply(lambda x : xtream_cleaning_data(x))
+			to_save_com = "cleaned_L3"
 	else:
 		to_save_com = "not_cleaned"
 	
@@ -84,7 +98,8 @@ def dataset_statistics(fakeCsv,trueCsv,fakeLabel,trueLabel,testHead,train_percen
 	dict_fake_not_in_true = not_in(fake_dict,true_dict)
 	print ( "Search for word in news that is in real and NOT in fake..." )
 	dict_true_not_in_fake = not_in(true_dict,fake_dict)
-	
+	print(dict_fake_not_in_true)
+	print(dict_true_not_in_fake)
 	print ( "Convert obtained dictionary to CSV" )
 	fake_word_count_CSV = pd.DataFrame(fake_dict.items()).sort_values(by=1,ascending=False)
 	true_word_count_CSV = pd.DataFrame(true_dict.items()).sort_values(by=1,ascending=False) 
@@ -92,7 +107,8 @@ def dataset_statistics(fakeCsv,trueCsv,fakeLabel,trueLabel,testHead,train_percen
 	dict_true_and_fake_CSV=pd.DataFrame(dict_true_and_fake.items()).sort_values(by=1,ascending=False)
 	dict_fake_not_in_true_CSV=pd.DataFrame(dict_fake_not_in_true.items()).sort_values(by=1,ascending=False)
 	dict_true_not_in_fake_CSV=pd.DataFrame(dict_true_not_in_fake.items()).sort_values(by=1,ascending=False)
-
+	print(dict_fake_not_in_true_CSV)	
+	print(dict_true_not_in_fake_CSV)
 	if saveProc != "":
 		print( "Save processed data" )
 		with open( "fake_"+saveProc, 'w') as f:
@@ -145,12 +161,34 @@ def load_prepared_dataset(trainCsv,testCsv,testHead):
 	dataset = [data_train[[testHead,'label']], data_test[[testHead,'label']]]
 	return dataset
 	
+def xtream_cleaning_data(row):
+	ps = WordNetLemmatizer()
+	stopwords1 = stopwords.words('english')
+
+	row = row.replace("U.S.", "UnitedStates")
+	row = row.lower()
+	row = re.sub('[^a-zA-Z]' , ' ' , row)
+	
+	token = row.split() 
+	
+	news = [ps.lemmatize(word) for word in token if not word in stopwords1]  
+	cleanned_news = ' '.join(news) 
+	
 def cleaning_data(row):
 	ps = WordNetLemmatizer()
 	stopwords1 = stopwords.words('english')
 	
 	row = row.lower()
 	row = re.sub('[^a-zA-Z]' , ' ' , row)
+	
+	token = row.split() 
+	
+	news = [ps.lemmatize(word) for word in token if not word in stopwords1]  
+	cleanned_news = ' '.join(news) 
+	
+def soft_cleaning_data(row):
+	ps = WordNetLemmatizer()
+	stopwords1 = stopwords.words('english')
 	
 	token = row.split() 
 	

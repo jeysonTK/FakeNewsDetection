@@ -1,12 +1,13 @@
 <config>
 	<mode value="STATISTICS"/>
-	<percentage value="10"/>
+	<percentage value="20"/>
 	<type value="ML"/>
 	<clean value="false"/>
+	<cleanLevel value="2"/>
 	<saveProc value=""/>
 	<files>
-		<true value="true_stat.csv"/>
-		<fake value="fake_stat.csv"/>
+		<true value="True.csv"/>
+		<fake value="Fake.csv"/>
 		<saveModel value="model_clean_pikle.pkl"/>
 	</files>
 	<labels>
