@@ -1,5 +1,6 @@
 import re
 import nltk
+import pylab as pl
 import pandas as pd
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
@@ -48,7 +49,76 @@ def prepare_dataset(fakeCsv,trueCsv,fakeLabel,trueLabel,testHead,train_percentag
 	
 	print ( dataset )
 	return dataset
+	
+def dataset_statistics(fakeCsv,trueCsv,fakeLabel,trueLabel,testHead,train_percentage, clean,saveProc): 
+	print ( "Generate statistics..." )
+	print ( "Read data from files..." )
+	fake = pd.read_csv(fakeCsv)
+	true = pd.read_csv(trueCsv)
+	
+	train_percentage = int(train_percentage)
+	if train_percentage < 5:
+		train_percentage = 5
+	
+	if clean.lower() == "true":
+		print ( "Cleaning data...")
+		fake[testHead] = fake[testHead].apply(lambda x : cleaning_data(x))
+		true[testHead] = true[testHead].apply(lambda x : cleaning_data(x))
+	
+	fake_dict = word_dict(fake[testHead])
+	true_dict = word_dict(true[testHead])
+	
+	dict_fake_and_true = union_dict(fake_dict,true_dict)
+	dict_true_and_fake = union_dict(true_dict,fake_dict)
+	
+	dict_fake_not_in_true = not_in(fake_dict,true_dict)
+	dict_true_not_in_fake = not_in(true_dict,fake_dict)
+	
+	fake_word_count_CSV = pd.DataFrame(fake_dict.items()).sort_values(by=1,ascending=False)
+	true_word_count_CSV = pd.DataFrame(true_dict.items()).sort_values(by=1,ascending=False) 
+	dict_fake_and_true_CSV=pd.DataFrame(dict_fake_and_true.items()).sort_values(by=1,ascending=False)
+	dict_true_and_fake_CSV=pd.DataFrame(dict_true_and_fake.items()).sort_values(by=1,ascending=False)
+	dict_fake_not_in_true_CSV=pd.DataFrame(dict_fake_not_in_true.items()).sort_values(by=1,ascending=False)
+	dict_true_not_in_fake_CSV=pd.DataFrame(dict_true_not_in_fake.items()).sort_values(by=1,ascending=False)
 
+	if saveProc != "":
+		print( "Save processed data" )
+		with open( "fake_"+saveProc, 'w') as f:
+			f.write("word,no\n")
+			for key in fake_dict.keys():
+				f.write("%s,%s\n"%(key,fake_dict[key]))
+		with open( "true_"+saveProc, 'w') as f:
+			f.write("word,no\n")
+			for key in true_dict.keys():
+				f.write("%s,%s\n"%(key,true_dict[key]))
+				
+	pl.rcParams["figure.figsize"] = (10, 5)
+	
+	fake_myplot = fake_word_count_CSV[0:train_percentage].plot.bar(x=0, y=1, rot=0)
+	fake_myplot.figure.savefig("false_"+saveProc+".pdf")
+	
+	true_myplot = true_word_count_CSV[0:train_percentage].plot.bar(x=0, y=1, rot=0)
+	true_myplot.figure.savefig("true_"+saveProc+".pdf")
+	
+	dict_fake_and_true_CSV_myplot = dict_fake_and_true_CSV[0:train_percentage].plot.bar(x=0, y=1, rot=0)
+	dict_fake_and_true_CSV_myplot.figure.savefig("Fake_And_True_"+saveProc+".pdf")
+	
+	dict_fake_and_true_CSV_myplot2 = dict_fake_and_true_CSV[(len(dict_fake_and_true_CSV)-train_percentage):len(dict_fake_and_true_CSV)].plot.bar(x=0, y=1, rot=0)
+	dict_fake_and_true_CSV_myplot2.figure.savefig("Fake_And_True_Min_"+saveProc+".pdf")
+	
+	dict_true_and_fake_CSV_myplot = dict_true_and_fake_CSV[0:train_percentage].plot.bar(x=0, y=1, rot=0)
+	dict_true_and_fake_CSV_myplot.figure.savefig("True_And_Fake_"+saveProc+".pdf")
+	
+	dict_true_and_fake_CSV_myplot2 = dict_true_and_fake_CSV[(len(dict_true_and_fake_CSV)-train_percentage):len(dict_true_and_fake_CSV)].plot.bar(x=0, y=1, rot=0)
+	dict_true_and_fake_CSV_myplot2.figure.savefig("True_And_Fake_Min."+saveProc+".pdf")
+	
+	dict_fake_not_in_true_CSV_myplot = dict_fake_not_in_true_CSV[0:train_percentage].plot.bar(x=0, y=1, rot=0)
+	dict_fake_not_in_true_CSV_myplot.figure.savefig("fake_not_in_true_"+saveProc+".pdf")
+	
+	dict_true_not_in_fake_CSV_myplot = dict_true_not_in_fake_CSV[0:train_percentage].plot.bar(x=0, y=1, rot=0)
+	dict_true_not_in_fake_CSV_myplot.figure.savefig("true_not_in_fake_"+saveProc+".pdf")
+
+	
 def load_prepared_dataset(trainCsv,testCsv,testHead):
 	#Reload data from files
 	data_train = pd.read_csv(trainCsv)
@@ -74,3 +144,31 @@ def cleaning_data(row):
 	cleanned_news = ' '.join(news) 
 	
 	return cleanned_news 
+	
+def word_dict(column):
+	dict = {}
+	
+	for x in column:
+		funique =set(" ".join(str(x).split()).split(" "))
+		for word in funique:
+			if word in dict :
+				dict[word] += 1
+			else:
+				dict[word] = 1
+	return dict
+
+def union_dict(dict1,dict2):
+	dict3 = {}
+	for key in dict1.keys():
+		if key in dict2.keys() :
+			dict3[key] = dict1[key] - dict2[key]
+	
+	return dict3
+
+def not_in(dict1,dict2):
+	dict3 = {}
+	for key in dict1.keys():
+		if key not in dict2.keys() :
+			dict3[key] = dict1[key]
+			
+	return dict3

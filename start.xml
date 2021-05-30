@@ -1,12 +1,13 @@
 <config>
-	<mode value="TRAIN"/>
-	<percentage value="1"/>
+	<mode value="STATISTICS"/>
+	<percentage value="10"/>
 	<type value="ML"/>
-	<clean value="FALSE"/>
+	<clean value="false"/>
+	<saveProc value=""/>
 	<files>
-		<true value="True.csv"/>
-		<fake value="Fake.csv"/>
-		<saveModel value="model.pkl"/>
+		<true value="true_stat.csv"/>
+		<fake value="fake_stat.csv"/>
+		<saveModel value="model_clean_pikle.pkl"/>
 	</files>
 	<labels>
 		<true value="REAL"/>

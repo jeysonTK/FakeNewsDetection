@@ -18,10 +18,12 @@ def Init():
 	percentage = float(config.getElementsByTagName('percentage')[0].attributes["value"].value)
 	type = config.getElementsByTagName('type')[0].attributes["value"].value
 	print ( "Type ["+type+"]" )
+	saveProc = config.getElementsByTagName('saveProc')[0].attributes["value"].value
+	print ( "Save processed filename ["+saveProc+"]" )
 	clean = config.getElementsByTagName('clean')[0].attributes["value"].value
 	print ( "Clean ["+clean+"]" )
 	saveModel = config.getElementsByTagName('saveModel')[0].attributes["value"].value
 	print ("End of init data...")
 	
-	return [mode,type,saveModel,fakeCSV,trueCSV,fakeLabel,trueLabel,verificationLabel,percentage,clean];
+	return [mode,type,saveModel,fakeCSV,trueCSV,fakeLabel,trueLabel,verificationLabel,percentage,clean,saveProc];
 	
