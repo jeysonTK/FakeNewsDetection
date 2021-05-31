@@ -44,6 +44,7 @@ def prepare_dataset(fakeCsv,trueCsv,fakeLabel,trueLabel,testHead,train_percentag
 	dataset = [data_train[[testHead,'label']], data_test[[testHead,'label']]]
 	dataset = dataset[0]
 	if clean.lower() == "true":
+		clean_level = int(cleanLevel)
 		if clean_level == 1:
 			print ( "Cleaning data L1...")
 			dataset[testHead] = dataset[testHead].apply(lambda x : soft_cleaning_data(x))
